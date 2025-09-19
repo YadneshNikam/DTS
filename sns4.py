@@ -54,229 +54,370 @@ def initialize_session_state():
 # Call initialization immediately
 initialize_session_state()
 
-# Professional Mature Color Scheme CSS
+# Professional Dark Mode CSS with Mature Color Scheme
 st.markdown("""
 <style>
-    /* Import professional fonts */
+    /* Import modern fonts */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     
-    /* Root variables for mature color palette */
+    /* Dark mode color variables - Mature & Professional */
     :root {
-        --primary-dark: #1a365d;
-        --primary-medium: #2c5282;
-        --primary-light: #3182ce;
-        --secondary-dark: #2d3748;
-        --secondary-medium: #4a5568;
-        --secondary-light: #718096;
-        --accent-primary: #2b6cb0;
-        --accent-secondary: #3182ce;
-        --success-dark: #2f855a;
-        --success-medium: #38a169;
-        --warning-dark: #d69e2e;
-        --warning-medium: #ed8936;
-        --error-dark: #c53030;
-        --neutral-50: #f7fafc;
-        --neutral-100: #edf2f7;
-        --neutral-200: #e2e8f0;
-        --neutral-700: #4a5568;
-        --neutral-800: #2d3748;
-        --neutral-900: #1a202c;
+        --bg-primary: #0f0f23;
+        --bg-secondary: #1a1a2e;
+        --bg-tertiary: #16213e;
+        --bg-card: #1e1e3f;
+        --text-primary: #e6e6fa;
+        --text-secondary: #b8b8d4;
+        --text-muted: #8a8aaa;
+        --accent-primary: #4a9eff;
+        --accent-secondary: #6366f1;
+        --accent-tertiary: #8b5cf6;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --error-color: #ef4444;
+        --border-color: #374151;
+        --shadow-color: rgba(0, 0, 0, 0.4);
     }
     
-    /* Override Streamlit default styles */
+    /* Main app background and text */
     .stApp {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        background-color: var(--neutral-50);
+        background-color: var(--bg-primary) !important;
+        color: var(--text-primary) !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
     }
     
-    /* Main headers */
+    /* Override Streamlit's default backgrounds */
+    .main .block-container {
+        background-color: var(--bg-primary) !important;
+        color: var(--text-primary) !important;
+    }
+    
+    /* Headers with professional dark styling */
     .main-header {
-        font-size: 2.25rem !important;
+        font-size: 2.5rem !important;
         font-weight: 700;
         text-align: center;
-        color: var(--primary-dark);
+        color: var(--text-primary) !important;
         margin-bottom: 2rem;
         letter-spacing: -0.025em;
-        text-shadow: none;
+        text-shadow: 0 2px 4px var(--shadow-color);
     }
     
-    /* Section headers */
     .section-header {
         font-size: 1.5rem !important;
         font-weight: 600;
-        color: var(--secondary-dark);
+        color: var(--accent-primary) !important;
         margin: 2rem 0 1.5rem 0;
-        border-bottom: 2px solid var(--neutral-200);
+        border-bottom: 2px solid var(--border-color);
         padding-bottom: 0.75rem;
         letter-spacing: -0.015em;
     }
     
-    /* Professional info boxes */
+    /* Professional info boxes for dark mode */
     .info-box {
-        background: linear-gradient(135deg, var(--neutral-50) 0%, #ffffff 100%);
-        border: 1px solid var(--neutral-200);
-        border-left: 4px solid var(--primary-medium);
-        padding: 1.5rem;
-        border-radius: 8px;
-        margin: 1.5rem 0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-tertiary) 100%) !important;
+        border: 1px solid var(--border-color) !important;
+        border-left: 4px solid var(--accent-primary) !important;
+        padding: 1.5rem !important;
+        border-radius: 12px !important;
+        margin: 1.5rem 0 !important;
+        box-shadow: 0 4px 12px var(--shadow-color) !important;
+        color: var(--text-secondary) !important;
         font-size: 0.95rem;
         line-height: 1.6;
     }
     
     .info-box h4 {
-        color: var(--primary-dark);
+        color: var(--text-primary) !important;
         margin-bottom: 0.75rem;
         font-weight: 600;
     }
     
-    /* Warning boxes with mature styling */
+    /* Warning boxes */
     .warning-box {
-        background: linear-gradient(135deg, #fef5e7 0%, #fff8f0 100%);
-        border: 1px solid #f6e3c5;
-        border-left: 4px solid var(--warning-dark);
-        padding: 1.5rem;
-        border-radius: 8px;
-        margin: 1.5rem 0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        background: linear-gradient(135deg, #2d1b17 0%, #3d2319 100%) !important;
+        border: 1px solid #8b4513 !important;
+        border-left: 4px solid var(--warning-color) !important;
+        padding: 1.5rem !important;
+        border-radius: 12px !important;
+        margin: 1.5rem 0 !important;
+        box-shadow: 0 4px 12px var(--shadow-color) !important;
+        color: #ffd4a3 !important;
     }
     
     .warning-box h3, .warning-box h4 {
-        color: var(--warning-dark);
+        color: var(--warning-color) !important;
         margin-bottom: 0.75rem;
         font-weight: 600;
     }
     
     /* Success boxes */
     .success-box {
-        background: linear-gradient(135deg, #f0fff4 0%, #f7fdf9 100%);
-        border: 1px solid #c6f6d5;
-        border-left: 4px solid var(--success-dark);
-        padding: 1.5rem;
-        border-radius: 8px;
-        margin: 1.5rem 0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        background: linear-gradient(135deg, #1a2e20 0%, #1e3323 100%) !important;
+        border: 1px solid #2d5a3d !important;
+        border-left: 4px solid var(--success-color) !important;
+        padding: 1.5rem !important;
+        border-radius: 12px !important;
+        margin: 1.5rem 0 !important;
+        box-shadow: 0 4px 12px var(--shadow-color) !important;
+        color: #a7f3d0 !important;
     }
     
     .success-box h4 {
-        color: var(--success-dark);
+        color: var(--success-color) !important;
         margin-bottom: 0.75rem;
         font-weight: 600;
     }
     
-    /* Theory cards with professional styling */
-    .theory-card {
-        background: linear-gradient(135deg, #ffffff 0%, var(--neutral-50) 100%);
-        border: 1px solid var(--neutral-200);
-        padding: 2rem;
-        border-radius: 12px;
-        margin: 1.5rem 0;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    }
-    
-    .theory-card h3 {
-        color: var(--primary-dark);
-        margin-bottom: 1rem;
-        font-weight: 600;
-        border-bottom: 1px solid var(--neutral-200);
-        padding-bottom: 0.5rem;
-    }
-    
-    /* Step indicators with mature design */
+    /* Step indicators */
     .step-indicator {
-        background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--secondary-medium) 100%);
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 6px;
-        font-weight: 600;
-        display: inline-block;
-        margin: 1rem 0 0.5rem 0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        font-size: 0.9rem;
-        letter-spacing: 0.025em;
+        background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-tertiary) 100%) !important;
+        color: white !important;
+        padding: 0.75rem 1.5rem !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        display: inline-block !important;
+        margin: 1rem 0 0.5rem 0 !important;
+        box-shadow: 0 3px 8px var(--shadow-color) !important;
+        font-size: 0.9rem !important;
+        letter-spacing: 0.025em !important;
     }
     
-    /* Override Streamlit button styles */
+    /* Buttons with professional dark styling */
     .stButton > button {
-        background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-light) 100%);
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-weight: 500;
-        letter-spacing: 0.025em;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: all 0.2s ease;
+        background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.025em !important;
+        box-shadow: 0 3px 8px var(--shadow-color) !important;
+        transition: all 0.3s ease !important;
+        font-family: 'Inter', sans-serif !important;
     }
     
     .stButton > button:hover {
-        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        transform: translateY(-1px);
+        background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-tertiary) 100%) !important;
+        box-shadow: 0 6px 16px var(--shadow-color) !important;
+        transform: translateY(-2px) !important;
     }
     
     /* Sidebar styling */
     .css-1d391kg {
-        background-color: var(--neutral-100);
-        border-right: 1px solid var(--neutral-200);
+        background-color: var(--bg-secondary) !important;
+        border-right: 1px solid var(--border-color) !important;
+        color: var(--text-primary) !important;
+    }
+    
+    /* Sidebar text */
+    .css-1d391kg .stMarkdown, .css-1d391kg p, .css-1d391kg h1, .css-1d391kg h2, .css-1d391kg h3 {
+        color: var(--text-primary) !important;
     }
     
     /* Metric cards */
     [data-testid="metric-container"] {
-        background: linear-gradient(135deg, #ffffff 0%, var(--neutral-50) 100%);
-        border: 1px solid var(--neutral-200);
-        padding: 1rem;
-        border-radius: 8px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-tertiary) 100%) !important;
+        border: 1px solid var(--border-color) !important;
+        padding: 1rem !important;
+        border-radius: 10px !important;
+        box-shadow: 0 3px 8px var(--shadow-color) !important;
+        color: var(--text-primary) !important;
+    }
+    
+    [data-testid="metric-container"] label {
+        color: var(--text-secondary) !important;
+    }
+    
+    [data-testid="metric-container"] [data-testid="metric-value"] {
+        color: var(--accent-primary) !important;
     }
     
     /* Expander styling */
     .streamlit-expanderHeader {
-        background-color: var(--neutral-100);
-        border: 1px solid var(--neutral-200);
-        color: var(--secondary-dark);
-        font-weight: 500;
+        background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-tertiary) 100%) !important;
+        border: 1px solid var(--border-color) !important;
+        color: var(--text-primary) !important;
+        font-weight: 500 !important;
+        border-radius: 8px !important;
+    }
+    
+    .streamlit-expanderContent {
+        background-color: var(--bg-card) !important;
+        border: 1px solid var(--border-color) !important;
+        border-top: none !important;
+        color: var(--text-secondary) !important;
+        border-radius: 0 0 8px 8px !important;
     }
     
     /* Tab styling */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 2px;
-        background-color: var(--neutral-100);
-        border-radius: 8px;
-        padding: 4px;
+        gap: 4px !important;
+        background-color: var(--bg-secondary) !important;
+        border-radius: 10px !important;
+        padding: 6px !important;
     }
     
     .stTabs [data-baseweb="tab"] {
-        background-color: transparent;
-        color: var(--secondary-medium);
-        font-weight: 500;
-        border-radius: 6px;
-        padding: 0.75rem 1.5rem;
-        transition: all 0.2s ease;
+        background-color: transparent !important;
+        color: var(--text-muted) !important;
+        font-weight: 500 !important;
+        border-radius: 8px !important;
+        padding: 0.75rem 1.5rem !important;
+        transition: all 0.3s ease !important;
+        border: 1px solid transparent !important;
     }
     
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-light) 100%);
-        color: white;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%) !important;
+        color: white !important;
+        box-shadow: 0 3px 8px var(--shadow-color) !important;
+        border: 1px solid var(--accent-primary) !important;
     }
     
-    /* Professional slider styling */
-    .stSlider > div > div > div {
-        background-color: var(--primary-medium);
+    /* Slider styling */
+    .stSlider > div > div > div > div {
+        color: var(--text-primary) !important;
     }
     
-    /* Code block styling */
-    .stCodeBlock {
-        background-color: var(--neutral-900);
-        border: 1px solid var(--neutral-700);
-        border-radius: 6px;
+    .stSlider > div > div > div[role="slider"] {
+        background-color: var(--accent-primary) !important;
     }
     
-    /* Override plotly chart backgrounds for consistency */
-    .js-plotly-plot {
-        border: 1px solid var(--neutral-200);
-        border-radius: 8px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    .stSlider > div > div > div[data-baseweb="slider"] > div {
+        background-color: var(--bg-tertiary) !important;
+    }
+    
+    /* Selectbox styling */
+    .stSelectbox > div > div {
+        background-color: var(--bg-card) !important;
+        color: var(--text-primary) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 6px !important;
+    }
+    
+    /* Text input styling */
+    .stTextInput > div > div > input {
+        background-color: var(--bg-card) !important;
+        color: var(--text-primary) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 6px !important;
+    }
+    
+    /* Number input styling */
+    .stNumberInput > div > div > input {
+        background-color: var(--bg-card) !important;
+        color: var(--text-primary) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 6px !important;
+    }
+    
+    /* Code blocks */
+    .stCode {
+        background-color: var(--bg-tertiary) !important;
+        color: var(--text-primary) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Radio button styling */
+    .stRadio > div {
+        background-color: var(--bg-card) !important;
+        border-radius: 8px !important;
+        padding: 0.5rem !important;
+        border: 1px solid var(--border-color) !important;
+    }
+    
+    /* Download button special styling */
+    .stDownloadButton > button {
+        background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%) !important;
+        color: white !important;
+    }
+    
+    .stDownloadButton > button:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    }
+    
+    /* Success alert */
+    .stAlert[data-baseweb="notification"] {
+        background-color: var(--bg-card) !important;
+        border-left: 4px solid var(--success-color) !important;
+        color: var(--text-primary) !important;
+    }
+    
+    /* Plotly chart container */
+    .js-plotly-plot .plotly {
+        background-color: var(--bg-card) !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px var(--shadow-color) !important;
+    }
+    
+    /* File uploader */
+    .stFileUploader > div > div {
+        background-color: var(--bg-card) !important;
+        border: 2px dashed var(--border-color) !important;
+        border-radius: 10px !important;
+    }
+    
+    /* Progress bar */
+    .stProgress > div > div > div {
+        background-color: var(--accent-primary) !important;
+    }
+    
+    /* Audio player */
+    audio {
+        filter: invert(0.8) hue-rotate(180deg) !important;
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--accent-primary);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-secondary);
+    }
+    
+    /* Custom markdown text colors */
+    .stMarkdown {
+        color: var(--text-primary) !important;
+    }
+    
+    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6 {
+        color: var(--text-primary) !important;
+    }
+    
+    .stMarkdown p {
+        color: var(--text-secondary) !important;
+    }
+    
+    /* Strong/bold text */
+    .stMarkdown strong, .stMarkdown b {
+        color: var(--text-primary) !important;
+    }
+    
+    /* Links */
+    .stMarkdown a {
+        color: var(--accent-primary) !important;
+    }
+    
+    .stMarkdown a:hover {
+        color: var(--accent-secondary) !important;
+    }
+    
+    /* Lists */
+    .stMarkdown ul li, .stMarkdown ol li {
+        color: var(--text-secondary) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -284,18 +425,18 @@ st.markdown("""
 class InteractiveSignalSimulator:
     def __init__(self):
         self.sampling_rate = 44100
-        # Professional color palette for plots
+        # Professional dark mode color palette for plots
         self.colors = {
-            'primary': '#2c5282',      # Professional blue
-            'secondary': '#2d3748',    # Charcoal gray
-            'accent': '#3182ce',       # Medium blue
-            'success': '#38a169',      # Forest green
-            'warning': '#d69e2e',      # Golden amber
-            'error': '#c53030',        # Deep red
-            'original': '#2c5282',     # Professional blue
-            'processed': '#d69e2e',    # Golden amber
-            'voice_original': '#38a169', # Forest green
-            'voice_processed': '#c53030' # Deep red
+            'primary': '#4a9eff',      # Bright blue for primary elements
+            'secondary': '#6366f1',    # Indigo for secondary elements
+            'accent': '#8b5cf6',       # Purple for accents
+            'success': '#10b981',      # Emerald green for success
+            'warning': '#f59e0b',      # Amber for warnings
+            'error': '#ef4444',        # Red for errors
+            'original': '#4a9eff',     # Bright blue for original signals
+            'processed': '#f59e0b',    # Amber for processed signals
+            'voice_original': '#10b981', # Emerald for original voice
+            'voice_processed': '#ef4444' # Red for processed voice
         }
 
     def get_dts_info(self):
@@ -473,7 +614,7 @@ class InteractiveSignalSimulator:
         return demos
 
     def plot_demo(self, demos):
-        """Plot operation demonstrations with professional styling"""
+        """Plot operation demonstrations with dark mode styling"""
         fig = make_subplots(
             rows=2, cols=2,
             subplot_titles=[demo[1] for demo in demos[:4]],
@@ -481,7 +622,7 @@ class InteractiveSignalSimulator:
             horizontal_spacing=0.15
         )
         
-        # Professional color palette
+        # Dark mode friendly colors
         colors = [self.colors['primary'], self.colors['success'], self.colors['warning'], self.colors['error']]
         
         for i, (signal, label) in enumerate(demos[:4]):
@@ -502,10 +643,10 @@ class InteractiveSignalSimulator:
         fig.update_layout(
             height=500,
             title_text="Interactive Operation Demonstration",
-            template="simple_white",
-            font=dict(family="Inter, sans-serif", size=12, color=self.colors['secondary']),
-            plot_bgcolor='white',
-            paper_bgcolor='white'
+            template="plotly_dark",
+            font=dict(family="Inter, sans-serif", size=12, color='#e6e6fa'),
+            plot_bgcolor='#1e1e3f',
+            paper_bgcolor='#1e1e3f'
         )
         
         return fig
@@ -632,7 +773,7 @@ class InteractiveSignalSimulator:
             return 0.0, "Analysis Failed", f"Error: {str(e)}"
 
     def plot_signal_plotly(self, samples, title="Signal", color_key="primary"):
-        """Enhanced plotting with professional styling"""
+        """Enhanced plotting with dark mode styling"""
         fig = go.Figure()
         
         if len(samples) > 0:
@@ -651,23 +792,23 @@ class InteractiveSignalSimulator:
                 'text': title,
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 16, 'color': self.colors['secondary'], 'family': 'Inter, sans-serif'}
+                'font': {'size': 16, 'color': '#e6e6fa', 'family': 'Inter, sans-serif'}
             },
             xaxis_title="Time (seconds)",
             yaxis_title="Amplitude",
-            template="simple_white",
+            template="plotly_dark",
             height=400,
             showlegend=False,
             hovermode='x unified',
-            font=dict(family="Inter, sans-serif", size=12, color=self.colors['secondary']),
-            plot_bgcolor='white',
-            paper_bgcolor='white'
+            font=dict(family="Inter, sans-serif", size=12, color='#e6e6fa'),
+            plot_bgcolor='#1e1e3f',
+            paper_bgcolor='#1e1e3f'
         )
         
         return fig
 
     def plot_comparison_plotly(self, original, processed):
-        """Enhanced comparison plot with professional styling"""
+        """Enhanced comparison plot with dark mode styling"""
         fig = go.Figure()
         
         time_orig = np.arange(len(original)) / self.sampling_rate
@@ -697,31 +838,31 @@ class InteractiveSignalSimulator:
                 'text': "Signal Comparison: Original vs Processed",
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 16, 'color': self.colors['secondary'], 'family': 'Inter, sans-serif'}
+                'font': {'size': 16, 'color': '#e6e6fa', 'family': 'Inter, sans-serif'}
             },
             xaxis_title="Time (seconds)",
             yaxis_title="Amplitude",
-            template="simple_white",
+            template="plotly_dark",
             height=450,
             legend=dict(
                 yanchor="top",
                 y=0.99,
                 xanchor="left",
                 x=0.01,
-                bgcolor="rgba(255,255,255,0.8)",
-                bordercolor=self.colors['secondary'],
+                bgcolor="rgba(30,30,63,0.8)",
+                bordercolor='#4a9eff',
                 borderwidth=1
             ),
             hovermode='x unified',
-            font=dict(family="Inter, sans-serif", size=12, color=self.colors['secondary']),
-            plot_bgcolor='white',
-            paper_bgcolor='white'
+            font=dict(family="Inter, sans-serif", size=12, color='#e6e6fa'),
+            plot_bgcolor='#1e1e3f',
+            paper_bgcolor='#1e1e3f'
         )
         
         return fig
 
 def signal_generator_page():
-    """Enhanced Signal Generator with professional design"""
+    """Enhanced Signal Generator with dark mode design"""
     simulator = InteractiveSignalSimulator()
     
     st.markdown('<p class="main-header">Professional DTS Analysis Platform</p>', unsafe_allow_html=True)
@@ -756,7 +897,7 @@ def signal_generator_page():
     
     operations_info = simulator.get_operations_info()
     
-    # Create tabs for each operation with professional styling
+    # Create tabs for each operation with dark styling
     tab1, tab2, tab3, tab4 = st.tabs(["Amplitude Scaling", "Amplitude Shift", "Time Scaling", "Time Shift"])
     
     for tab, op_key in zip([tab1, tab2, tab3, tab4], ['amplitude_scale', 'amplitude_shift', 'time_scale', 'time_shift']):
@@ -981,7 +1122,7 @@ def signal_generator_page():
             )
 
 def voice_dts_processor_page():
-    """Professional Voice DTS Processor"""
+    """Professional Voice DTS Processor with Dark Mode - COMPLETE VERSION"""
     simulator = InteractiveSignalSimulator()
     
     st.markdown('<p class="main-header">Voice Signal Analysis Laboratory</p>', unsafe_allow_html=True)
@@ -1043,8 +1184,8 @@ def voice_dts_processor_page():
                 try:
                     audio_bytes = audio_recorder(
                         text="Start Recording",
-                        recording_color="#c53030",
-                        neutral_color="#2c5282",
+                        recording_color="#ef4444",
+                        neutral_color="#4a9eff",
                         icon_name="microphone",
                         icon_size="1.5x",
                         pause_threshold=1.5,
@@ -1149,7 +1290,7 @@ def voice_dts_processor_page():
                 <li><strong>Sustained "Ahhh"</strong> - High periodicity (0.8+)</li>
                 <li><strong>Musical whistle</strong> - Very high periodicity (0.9+)</li>
                 <li><strong>Counting sequence</strong> - Medium periodicity (0.3-0.6)</li>
-                <li><strong>White noise</strong> - Low periodicity (<0.2)</li>
+                <li><strong>White noise</strong> - Low periodicity (&lt;0.2)</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -1252,54 +1393,7 @@ def voice_dts_processor_page():
         # Professional signal comparison
         st.markdown('<div class="step-indicator">Step 5: Comparative Analysis</div>', unsafe_allow_html=True)
         
-        # Use professional colors for comparison
-        fig_comp = go.Figure()
-        
-        time_orig = np.arange(len(st.session_state.voice_raw)) / st.session_state.voice_sr
-        time_proc = np.arange(len(processed_voice)) / st.session_state.voice_sr
-        
-        fig_comp.add_trace(go.Scatter(
-            x=time_orig,
-            y=st.session_state.voice_raw,
-            mode='lines',
-            name='Original Signal',
-            line=dict(color=simulator.colors['voice_original'], width=2.5),
-        ))
-        
-        fig_comp.add_trace(go.Scatter(
-            x=time_proc,
-            y=processed_voice,
-            mode='lines',
-            name='Processed Signal',
-            line=dict(color=simulator.colors['voice_processed'], width=2.5),
-            opacity=0.85,
-        ))
-        
-        fig_comp.update_layout(
-            title={
-                'text': "Comparative Signal Analysis: Original vs Processed",
-                'x': 0.5,
-                'xanchor': 'center',
-                'font': {'size': 16, 'color': simulator.colors['secondary'], 'family': 'Inter, sans-serif'}
-            },
-            xaxis_title="Time (seconds)",
-            yaxis_title="Amplitude",
-            template="simple_white",
-            height=450,
-            legend=dict(
-                yanchor="top",
-                y=0.99,
-                xanchor="left",
-                x=0.01,
-                bgcolor="rgba(255,255,255,0.9)",
-                bordercolor=simulator.colors['secondary'],
-                borderwidth=1
-            ),
-            font=dict(family="Inter, sans-serif", size=12, color=simulator.colors['secondary']),
-            plot_bgcolor='white',
-            paper_bgcolor='white'
-        )
-        
+        fig_comp = simulator.plot_comparison_plotly(st.session_state.voice_raw, processed_voice)
         st.plotly_chart(fig_comp, use_container_width=True)
         
         # Professional analysis and playback section
@@ -1470,7 +1564,7 @@ def main():
             st.markdown("**Signal Generation Controls**")
             
             if st.session_state.signal_history:
-                st.markdown("**Recent Signal Library**")
+                st.markdown("**📜 Recent Signal Library**")
                 for i, entry in enumerate(reversed(st.session_state.signal_history[-3:])):
                     idx = len(st.session_state.signal_history) - i
                     if st.button(f"Load {entry['type'].title()} #{idx}", key=f"load_{idx}"):
@@ -1558,8 +1652,8 @@ def main():
     # Professional footer
     st.markdown("---")
     st.markdown("""
-    <div style="text-align: center; color: #4a5568; padding: 20px; background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%); border-radius: 8px; margin-top: 2rem;">
-        <h3 style="color: #2d3748; font-family: 'Inter', sans-serif; font-weight: 600;">Professional DTS Analysis Platform</h3>
+    <div style="text-align: center; color: #b8b8d4; padding: 20px; background: linear-gradient(135deg, #1e1e3f 0%, #16213e 100%); border-radius: 8px; margin-top: 2rem;">
+        <h3 style="color: #e6e6fa; font-family: 'Inter', sans-serif; font-weight: 600;">Professional DTS Analysis Platform</h3>
         <p style="margin: 0.5rem 0;">Advanced discrete-time signal processing for engineering and research applications</p>
         <p style="margin: 0; font-size: 0.9rem;"><strong>Domain Expertise:</strong> Digital Signal Processing • Linear Systems Theory • Audio Engineering • Research Analytics</p>
     </div>
