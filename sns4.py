@@ -26,7 +26,7 @@ except ImportError:
 
 # Configure Streamlit page
 st.set_page_config(
-    page_title="Professional DTS Analysis Platform",
+    page_title="Discrete Time Simulator",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -865,7 +865,7 @@ def signal_generator_page():
     """Enhanced Signal Generator with dark mode design"""
     simulator = InteractiveSignalSimulator()
     
-    st.markdown('<p class="main-header">Professional DTS Analysis Platform</p>', unsafe_allow_html=True)
+    st.markdown('<p class="main-header"> DTS Analysis Platform</p>', unsafe_allow_html=True)
     
     # DTS Theory Section
     if st.session_state.show_theory:
@@ -920,7 +920,7 @@ def signal_generator_page():
                     st.markdown(f"• **{param}**: {effect}")
                 
                 # Applications
-                st.markdown("**Professional Applications:**")
+                st.markdown("**Applications:**")
                 for app in op_info['applications']:
                     st.markdown(f"• {app}")
                 
@@ -993,7 +993,7 @@ def signal_generator_page():
         
         st.markdown('<div class="step-indicator">Step 3: Signal Generation</div>', unsafe_allow_html=True)
         
-        if st.button("Generate Professional Signal", type="primary", use_container_width=True):
+        if st.button("Generate Signal", type="primary", use_container_width=True):
             with st.spinner('Processing signal generation...'):
                 samples = simulator.generate_signal(signal_type, params)
                 st.session_state.current_samples = samples
@@ -1033,7 +1033,7 @@ def signal_generator_page():
     if len(st.session_state.current_samples) > 0:
         st.markdown('<p class="section-header">Signal Processing Operations</p>', unsafe_allow_html=True)
         
-        st.markdown('<div class="step-indicator">Step 4: Apply Signal Transformations</div>', unsafe_allow_html=True)
+        st.markdown('<div class="step-indicator">Step 4: Apply Signal Operations</div>', unsafe_allow_html=True)
         
         # Professional operations interface
         op_col1, op_col2 = st.columns(2)
@@ -1041,7 +1041,7 @@ def signal_generator_page():
         with op_col1:
             st.markdown("**Amplitude Domain Operations**")
             amplitude_scale = st.slider('Amplitude Scaling Factor', 0.1, 5.0, 1.0, 0.1, key="main_amp_scale")
-            amplitude_shift = st.slider('DC Offset Value', -3.0, 3.0, 0.0, 0.1, key="main_amp_shift")
+            amplitude_shift = st.slider('Amplitude Shifting ', -3.0, 3.0, 0.0, 0.1, key="main_amp_shift")
         
         with op_col2:
             st.markdown("**Time Domain Operations**")
@@ -1063,7 +1063,7 @@ def signal_generator_page():
         if amplitude_scale != 1.0:
             transformations.append(f"Amplitude scaling: {amplitude_scale:.1f}×")
         if amplitude_shift != 0.0:
-            transformations.append(f"DC offset: {amplitude_shift:+.2f}")
+            transformations.append(f"Amplitude shifting: {amplitude_shift:+.2f}")
         if time_scale != 1.0:
             transformations.append(f"Time scaling: {time_scale:.1f}×")
         if time_shift != 0:
@@ -1139,7 +1139,7 @@ def voice_dts_processor_page():
             4. **Quantization**: Amplitude discretization to finite precision levels
             5. **Digital Processing**: Mathematical manipulation of discrete signal samples
             
-            **Professional Applications:**
+            **Applications:**
             - Speech recognition and natural language processing
             - Audio compression algorithms (MP3, AAC, Opus)
             - Real-time communication systems
@@ -1175,7 +1175,7 @@ def voice_dts_processor_page():
         )
         
         if acquisition_method == "🎙️ Real-time Recording":
-            st.markdown("**Professional Audio Recording:**")
+            st.markdown("**Audio Recording:**")
             
             if audio_recorder is None:
                 st.error("⚠️ Audio recording component unavailable. Install: `pip install audio-recorder-streamlit`")
@@ -1230,7 +1230,7 @@ def voice_dts_processor_page():
                     st.error(f"⚠️ Recording system error: {e}")
         
         else:  # File import
-            st.markdown("**Professional Audio Import:**")
+            st.markdown("**Audio Import:**")
             uploaded_file = st.file_uploader(
                 "Select audio file for analysis",
                 type=['wav', 'mp3', 'ogg', 'flac', 'm4a'],
@@ -1268,7 +1268,7 @@ def voice_dts_processor_page():
                     st.error(f"⚠️ File processing error: {e}")
     
     with col2:
-        st.markdown("**Professional Guidelines**")
+        st.markdown("**Guidelines**")
         
         st.markdown("""
         <div class='info-box'>
@@ -1323,14 +1323,14 @@ def voice_dts_processor_page():
             st.markdown("**Amplitude Domain Processing**")
             
             amp_scale = st.slider(
-                'Amplitude Scaling Factor',
+                'Amplitude Scaling',
                 0.1, 4.0, 1.0, 0.1,
                 key="voice_amp_scale",
                 help="Linear amplitude multiplication (gain control)"
             )
             
             amp_shift = st.slider(
-                'DC Offset Adjustment',
+                'Amplitude Shifting',
                 -1.0, 1.0, 0.0, 0.1,
                 key="voice_amp_shift",
                 help="Constant amplitude offset (baseline correction)"
@@ -1340,14 +1340,14 @@ def voice_dts_processor_page():
             st.markdown("**Time Domain Processing**")
             
             time_scale = st.slider(
-                'Temporal Scaling Factor',
+                'Time scaling',
                 0.5, 2.0, 1.0, 0.1,
                 key="voice_time_scale",
                 help="Time-axis compression/expansion (playback speed)"
             )
             
             time_shift = st.slider(
-                'Temporal Offset (samples)',
+                'Time shifting (samples)',
                 -500, 500, 0, 10,
                 key="voice_time_shift",
                 help="Time-domain delay/advance (synchronization)"
@@ -1369,7 +1369,7 @@ def voice_dts_processor_page():
         if amp_scale != 1.0:
             processing_operations.append(f"Amplitude scaling: {amp_scale:.2f}× ({20*np.log10(amp_scale):+.1f}dB)")
         if amp_shift != 0.0:
-            processing_operations.append(f"DC offset: {amp_shift:+.3f}")
+            processing_operations.append(f"Amplitude Shifting : {amp_shift:+.3f}")
         if time_scale != 1.0:
             processing_operations.append(f"Time scaling: {time_scale:.2f}× ({1/time_scale:.2f}× duration)")
         if time_shift != 0:
@@ -1468,7 +1468,7 @@ def voice_dts_processor_page():
                     st.error(f"Playback error: {e}")
         
         with playback_col3:
-            if st.button("💾 Professional Export", use_container_width=True):
+            if st.button("💾 Export", use_container_width=True):
                 try:
                     buffer = io.BytesIO()
                     if np.max(np.abs(processed_voice)) > 0:
@@ -1478,7 +1478,7 @@ def voice_dts_processor_page():
                     sf.write(buffer, normalized_proc, st.session_state.voice_sr, format='WAV', subtype='PCM_24')
                     
                     st.download_button(
-                        label="Download Professional WAV (24-bit)",
+                        label="Download WAV (24-bit)",
                         data=buffer.getvalue(),
                         file_name="processed_voice_professional.wav",
                         mime="audio/wav",
@@ -1523,16 +1523,16 @@ def voice_dts_processor_page():
         # Professional standby interface
         st.markdown("""
         <div class='warning-box'>
-            <h3>Professional Voice Analysis System</h3>
-            <p>Configure audio acquisition above to begin professional voice signal analysis and discrete-time processing.</p>
+            <h3>Voice Analysis System</h3>
+            <p>Configure audio acquisition above to begin  voice signal analysis and discrete-time processing.</p>
             <p><strong>System Capabilities:</strong></p>
             <ul>
                 <li>High-fidelity voice signal acquisition and digitization</li>
                 <li>Real-time discrete-time signal processing operations</li>
                 <li>Advanced LTI system analysis with periodicity measurement</li>
-                <li>Professional-grade signal visualization and analysis</li>
+                <li>signal visualization and analysis</li>
                 <li>Comparative analysis with statistical metrics</li>
-                <li>High-quality audio export with professional codecs</li>
+                <li>High-quality audio export with codecs</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -1541,7 +1541,7 @@ def main():
     """Professional main application interface"""
     
     with st.sidebar:
-        st.markdown("### 🎛️ Professional Control Center")
+        st.markdown("### 🎛️Control Center")
         
         page = st.radio(
             "Select Analysis Module:",
@@ -1622,7 +1622,7 @@ def main():
         
         # Professional resources
         st.markdown("---")
-        st.markdown("### 📖 Professional Resources")
+        st.markdown("### 📖 Resources")
         
         with st.expander("🧮 Mathematical References"):
             st.markdown("""
@@ -1635,7 +1635,7 @@ def main():
         
         with st.expander("🎯 Learning Objectives"):
             st.markdown("""
-            **Professional Competencies:**
+            **Competencies:**
             - Discrete-time signal theory and analysis
             - Linear time-invariant system characterization
             - Digital signal processing operations
