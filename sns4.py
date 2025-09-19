@@ -614,41 +614,38 @@ class InteractiveSignalSimulator:
         return demos
 
     def plot_demo(self, demos):
-        """Plot operation demonstrations with dark mode styling"""
-        fig = make_subplots(
-            rows=2, cols=2,
-            subplot_titles=[demo[1] for demo in demos[:4]],
-            vertical_spacing=0.15,
-            horizontal_spacing=0.15
-        )
-        
-        # Dark mode friendly colors
+        fig = make_subplots(rows=2, cols=2, subplot_titles=[d[1] for d in demos[:4]], vertical_spacing=0.15,
+                            horizontal_spacing=0.15)
         colors = [self.colors['primary'], self.colors['success'], self.colors['warning'], self.colors['error']]
-        
         for i, (signal, label) in enumerate(demos[:4]):
             row = i // 2 + 1
             col = i % 2 + 1
-            
-            fig.add_trace(
-                go.Scatter(
-                    y=signal,
+            n = np.arange(len(signal))
+            color = colors[i]
+            for idx in range(len(n)):
+                fig.add_trace(go.Scatter(
+                    x=[n[idx], n[idx]],
+                    y=[0, signal[idx]],
                     mode='lines',
-                    name=label,
-                    line=dict(color=colors[i], width=2.5),
+                    line=dict(color=color, width=2),
                     showlegend=False
-                ),
-                row=row, col=col
-            )
-        
+                ), row=row, col=col)
+            fig.add_trace(go.Scatter(
+                x=n,
+                y=signal,
+                mode='markers',
+                marker=dict(color=color, size=8),
+                name=label,
+                showlegend=False
+            ), row=row, col=col)
         fig.update_layout(
             height=500,
             title_text="Interactive Operation Demonstration",
             template="plotly_dark",
-            font=dict(family="Inter, sans-serif", size=12, color='#e6e6fa'),
-            plot_bgcolor='#1e1e3f',
-            paper_bgcolor='#1e1e3f'
+            font=dict(family="Inter, sans-serif", size=12, color="#e6e6fa"),
+            plot_bgcolor="#1e1e3f",
+            paper_bgcolor="#1e1e3f"
         )
-        
         return fig
 
     def generate_signal(self, signal_type, params):
@@ -772,94 +769,99 @@ class InteractiveSignalSimulator:
         except Exception as e:
             return 0.0, "Analysis Failed", f"Error: {str(e)}"
 
-    def plot_signal_plotly(self, samples, title="Signal", color_key="primary"):
-        """Enhanced plotting with dark mode styling"""
+    def plot_signal_plotly(self, samples, titleSignal, colorkey="primary"):
         fig = go.Figure()
-        
-        if len(samples) > 0:
-            time_axis = np.arange(len(samples)) / self.sampling_rate
+        n = np.arange(len(samples))
+        color = self.colors.get(colorkey, "#4a9eff")
+
+        # Add stems: vertical lines for each sample
+        for i in range(len(n)):
             fig.add_trace(go.Scatter(
-                x=time_axis,
-                y=samples,
+                x=[n[i], n[i]],
+                y=[0, samples[i]],
                 mode='lines',
-                name=title,
-                line=dict(color=self.colors.get(color_key, self.colors['primary']), width=2.5),
-                hovertemplate='<b>Time</b>: %{x:.4f}s<br><b>Amplitude</b>: %{y:.4f}<extra></extra>'
+                line=dict(color=color, width=2),
+                showlegend=False
             ))
-        
+        # Add markers: sample points
+        fig.add_trace(go.Scatter(
+            x=n,
+            y=samples,
+            mode='markers',
+            marker=dict(color=color, size=8),
+            name=titleSignal
+        ))
+
         fig.update_layout(
-            title={
-                'text': title,
-                'x': 0.5,
-                'xanchor': 'center',
-                'font': {'size': 16, 'color': '#e6e6fa', 'family': 'Inter, sans-serif'}
-            },
-            xaxis_title="Time (seconds)",
+            title=dict(text=titleSignal, x=0.5, xanchor='center',
+                       font=dict(size=16, color="#e6e6fa", family="Inter, sans-serif")),
+            xaxis_title="Sample Index (n)",
             yaxis_title="Amplitude",
             template="plotly_dark",
             height=400,
             showlegend=False,
-            hovermode='x unified',
-            font=dict(family="Inter, sans-serif", size=12, color='#e6e6fa'),
-            plot_bgcolor='#1e1e3f',
-            paper_bgcolor='#1e1e3f'
+            hovermode="x unified",
+            font=dict(family="Inter, sans-serif", size=12, color="#e6e6fa"),
+            plot_bgcolor="#1e1e3f",
+            paper_bgcolor="#1e1e3f"
         )
-        
         return fig
 
     def plot_comparison_plotly(self, original, processed):
-        """Enhanced comparison plot with dark mode styling"""
         fig = go.Figure()
-        
-        time_orig = np.arange(len(original)) / self.sampling_rate
-        time_proc = np.arange(len(processed)) / self.sampling_rate
-        
+        n_orig = np.arange(len(original))
+        n_proc = np.arange(len(processed))
+
+        # Original: blue stems/markers
+        for i in range(len(n_orig)):
+            fig.add_trace(go.Scatter(
+                x=[n_orig[i], n_orig[i]],
+                y=[0, original[i]],
+                mode='lines',
+                line=dict(color=self.colors['original'], width=2),
+                showlegend=False
+            ))
         fig.add_trace(go.Scatter(
-            x=time_orig,
+            x=n_orig,
             y=original,
-            mode='lines',
-            name='Original Signal',
-            line=dict(color=self.colors['original'], width=2.5),
-            hovertemplate='<b>Original</b><br>Time: %{x:.4f}s<br>Amplitude: %{y:.4f}<extra></extra>'
+            mode='markers',
+            marker=dict(color=self.colors['original'], size=8),
+            name='Original Signal'
         ))
-        
+
+        # Processed: amber stems/markers
+        for i in range(len(n_proc)):
+            fig.add_trace(go.Scatter(
+                x=[n_proc[i], n_proc[i]],
+                y=[0, processed[i]],
+                mode='lines',
+                line=dict(color=self.colors['processed'], width=2),
+                showlegend=False
+            ))
         fig.add_trace(go.Scatter(
-            x=time_proc,
+            x=n_proc,
             y=processed,
-            mode='lines',
-            name='Processed Signal',
-            line=dict(color=self.colors['processed'], width=2.5),
-            opacity=0.85,
-            hovertemplate='<b>Processed</b><br>Time: %{x:.4f}s<br>Amplitude: %{y:.4f}<extra></extra>'
+            mode='markers',
+            marker=dict(color=self.colors['processed'], size=8),
+            name='Processed Signal'
         ))
-        
+
         fig.update_layout(
-            title={
-                'text': "Signal Comparison: Original vs Processed",
-                'x': 0.5,
-                'xanchor': 'center',
-                'font': {'size': 16, 'color': '#e6e6fa', 'family': 'Inter, sans-serif'}
-            },
-            xaxis_title="Time (seconds)",
+            title=dict(text="Signal Comparison: Original vs Processed", x=0.5, xanchor='center',
+                       font=dict(size=16, color="#e6e6fa", family="Inter, sans-serif")),
+            xaxis_title="Sample Index (n)",
             yaxis_title="Amplitude",
             template="plotly_dark",
             height=450,
-            legend=dict(
-                yanchor="top",
-                y=0.99,
-                xanchor="left",
-                x=0.01,
-                bgcolor="rgba(30,30,63,0.8)",
-                bordercolor='#4a9eff',
-                borderwidth=1
-            ),
-            hovermode='x unified',
-            font=dict(family="Inter, sans-serif", size=12, color='#e6e6fa'),
-            plot_bgcolor='#1e1e3f',
-            paper_bgcolor='#1e1e3f'
+            legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01, bgcolor="rgba(30,30,63,0.8)",
+                        bordercolor="#4a9eff", borderwidth=1),
+            hovermode="x unified",
+            font=dict(family="Inter, sans-serif", size=12, color="#e6e6fa"),
+            plot_bgcolor="#1e1e3f",
+            paper_bgcolor="#1e1e3f"
         )
-        
         return fig
+
 
 def signal_generator_page():
     """Enhanced Signal Generator with dark mode design"""
@@ -1121,40 +1123,41 @@ def signal_generator_page():
                 use_container_width=True
             )
 
+
 def voice_dts_processor_page():
     """Professional Voice DTS Processor with Dark Mode - COMPLETE VERSION"""
     simulator = InteractiveSignalSimulator()
-    
+
     st.markdown('<p class="main-header">Voice Signal Analysis Laboratory</p>', unsafe_allow_html=True)
-    
+
     # Professional educational introduction
     if st.session_state.show_theory:
         with st.expander("🔬 Voice Signal Processing Fundamentals", expanded=True):
             st.markdown("""
             **Analog-to-Digital Conversion Process:**
-            
+
             1. **Acoustic Capture**: Microphone converts sound pressure waves to electrical signals
             2. **Anti-Aliasing Filtering**: Removes frequencies above Nyquist limit (fs/2)
             3. **Sampling**: Discrete-time sampling at regular intervals (typically 44.1kHz)
             4. **Quantization**: Amplitude discretization to finite precision levels
             5. **Digital Processing**: Mathematical manipulation of discrete signal samples
-            
+
             **Applications:**
             - Speech recognition and natural language processing
             - Audio compression algorithms (MP3, AAC, Opus)
             - Real-time communication systems
             - Acoustic signal enhancement and noise reduction
             """)
-        
+
         with st.expander("⚙️ Linear Time-Invariant System Analysis", expanded=False):
             st.markdown("""
             **LTI System Properties:**
-            
+
             - **Linearity**: Superposition principle applies - system response scales proportionally
             - **Time-Invariance**: System characteristics remain constant over time
             - **Stability**: Bounded input produces bounded output (BIBO stability)
             - **Causality**: Output depends only on present and past inputs
-            
+
             **Periodicity Analysis Metrics:**
             - **Score > 0.8**: Highly periodic signals (sustained vowels, musical tones)
             - **Score 0.5-0.8**: Moderately periodic (speech with prosodic patterns)
@@ -1163,20 +1166,19 @@ def voice_dts_processor_page():
 
     # Professional main interface
     col1, col2 = st.columns([1.5, 1])
-    
+
     with col1:
         st.markdown('<div class="step-indicator">Step 1: Audio Acquisition</div>', unsafe_allow_html=True)
-        
-        # Professional recording interface
+
         acquisition_method = st.radio(
             "Select acquisition method:",
             ["🎙️ Real-time Recording", "📂 File Import"],
             horizontal=True
         )
-        
+
         if acquisition_method == "🎙️ Real-time Recording":
             st.markdown("**Audio Recording:**")
-            
+
             if audio_recorder is None:
                 st.error("⚠️ Audio recording component unavailable. Install: `pip install audio-recorder-streamlit`")
                 st.info("💡 **Alternative:** Use file import option below")
@@ -1191,29 +1193,28 @@ def voice_dts_processor_page():
                         pause_threshold=1.5,
                         sample_rate=44100
                     )
-                    
+
                     if audio_bytes:
                         st.audio(audio_bytes, format="audio/wav")
-                        
+
                         try:
                             with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
                                 tmp_file.write(audio_bytes)
                                 tmp_file.flush()
-                                
+
                                 voice_data, sr = sf.read(tmp_file.name)
                                 if voice_data.ndim > 1:
                                     voice_data = voice_data[:, 0]  # Convert to mono
-                                
+
                                 st.session_state.voice_raw = voice_data
                                 st.session_state.voice_sr = sr
-                                
-                                # Professional analysis
+
                                 score, verdict, explanation = simulator.periodicity_check(voice_data)
-                                
+
                                 st.success(f"✓ Audio acquisition completed successfully")
-                                st.info(f"**Signal Properties:** {len(voice_data)/sr:.2f}s duration, {sr}Hz sample rate")
-                                
-                                # Professional LTI analysis display
+                                st.info(
+                                    f"**Signal Properties:** {len(voice_data) / sr:.2f}s duration, {sr}Hz sample rate")
+
                                 st.markdown(f"""
                                 <div class='info-box'>
                                     <h4>LTI System Analysis Results</h4>
@@ -1222,39 +1223,37 @@ def voice_dts_processor_page():
                                     <p><strong>Analysis:</strong> {explanation}</p>
                                 </div>
                                 """, unsafe_allow_html=True)
-                                
+
                         except Exception as e:
                             st.error(f"⚠️ Audio processing error: {e}")
-                            
+
                 except Exception as e:
                     st.error(f"⚠️ Recording system error: {e}")
-        
-        else:  # File import
+
+        else:
             st.markdown("**Audio Import:**")
             uploaded_file = st.file_uploader(
                 "Select audio file for analysis",
                 type=['wav', 'mp3', 'ogg', 'flac', 'm4a'],
                 help="Supported formats: WAV, MP3, OGG, FLAC, M4A (professional codecs)"
             )
-            
+
             if uploaded_file:
                 try:
                     voice_data, sr = sf.read(uploaded_file)
                     if voice_data.ndim > 1:
                         voice_data = voice_data[:, 0]
-                    
+
                     st.session_state.voice_raw = voice_data
                     st.session_state.voice_sr = sr
-                    
+
                     st.audio(uploaded_file)
-                    
-                    # Professional analysis
+
                     score, verdict, explanation = simulator.periodicity_check(voice_data)
-                    
+
                     st.success(f"✓ Audio file imported successfully")
-                    st.info(f"**Signal Properties:** {len(voice_data)/sr:.2f}s duration, {sr}Hz sample rate")
-                    
-                    # Professional LTI analysis
+                    st.info(f"**Signal Properties:** {len(voice_data) / sr:.2f}s duration, {sr}Hz sample rate")
+
                     st.markdown(f"""
                     <div class='info-box'>
                         <h4>LTI System Analysis Results</h4>
@@ -1263,13 +1262,13 @@ def voice_dts_processor_page():
                         <p><strong>Analysis:</strong> {explanation}</p>
                     </div>
                     """, unsafe_allow_html=True)
-                    
+
                 except Exception as e:
                     st.error(f"⚠️ File processing error: {e}")
-    
+
     with col2:
         st.markdown("**Guidelines**")
-        
+
         st.markdown("""
         <div class='info-box'>
             <h4>Recording Best Practices:</h4>
@@ -1282,7 +1281,7 @@ def voice_dts_processor_page():
             </ul>
         </div>
         """, unsafe_allow_html=True)
-        
+
         st.markdown("""
         <div class='info-box'>
             <h4>Analysis Test Signals:</h4>
@@ -1295,152 +1294,167 @@ def voice_dts_processor_page():
         </div>
         """, unsafe_allow_html=True)
 
-    # Professional signal visualization and processing
     if len(st.session_state.voice_raw) > 0:
         st.markdown('<div class="step-indicator">Step 2: Signal Analysis</div>', unsafe_allow_html=True)
-        
-        # Professional original signal visualization
-        fig_orig = simulator.plot_signal_plotly(
-            st.session_state.voice_raw,
-            "Original Voice Signal (Discrete-Time Domain)",
-            "voice_original"
+
+        # Discrete-time plot for original signal
+        x_orig = np.arange(len(st.session_state.voice_raw))
+        fig_orig = go.Figure()
+        fig_orig.add_trace(go.Scatter(x=x_orig, y=st.session_state.voice_raw,
+                                      mode='lines+markers',
+                                      name='Original Signal'))
+        fig_orig.update_layout(
+            title="Original Voice Signal (Discrete-Time Domain)",
+            xaxis_title="Sample Index (n)",
+            yaxis_title="Amplitude",
+            showlegend=True
         )
         st.plotly_chart(fig_orig, use_container_width=True)
-        
-        # Professional signal processing section
+
         st.markdown('<div class="step-indicator">Step 3: Digital Signal Processing</div>', unsafe_allow_html=True)
-        
+
         st.markdown("""
         <div class='info-box'>
             <strong>Real-time Processing Controls:</strong> Adjust parameters to observe real-time effects on signal characteristics and spectral content.
         </div>
         """, unsafe_allow_html=True)
-        
-        # Professional processing controls
+
         proc_col1, proc_col2 = st.columns(2)
-        
+
         with proc_col1:
             st.markdown("**Amplitude Domain Processing**")
-            
+
             amp_scale = st.slider(
                 'Amplitude Scaling',
                 0.1, 4.0, 1.0, 0.1,
                 key="voice_amp_scale",
                 help="Linear amplitude multiplication (gain control)"
             )
-            
+
             amp_shift = st.slider(
                 'Amplitude Shifting',
                 -1.0, 1.0, 0.0, 0.1,
                 key="voice_amp_shift",
                 help="Constant amplitude offset (baseline correction)"
             )
-        
+
         with proc_col2:
             st.markdown("**Time Domain Processing**")
-            
+
             time_scale = st.slider(
                 'Time scaling',
                 0.5, 2.0, 1.0, 0.1,
                 key="voice_time_scale",
                 help="Time-axis compression/expansion (playback speed)"
             )
-            
+
             time_shift = st.slider(
                 'Time shifting (samples)',
                 -500, 500, 0, 10,
                 key="voice_time_shift",
                 help="Time-domain delay/advance (synchronization)"
             )
-        
-        # Professional real-time processing
+
         voice_operations = {
             'amplitude_scale': amp_scale,
             'amplitude_shift': amp_shift,
             'time_scale': time_scale,
             'time_shift': time_shift
         }
-        
+
         processed_voice = simulator.apply_operations(st.session_state.voice_raw, voice_operations)
         st.session_state.voice_processed = processed_voice
-        
-        # Professional operation summary
+
         processing_operations = []
         if amp_scale != 1.0:
-            processing_operations.append(f"Amplitude scaling: {amp_scale:.2f}× ({20*np.log10(amp_scale):+.1f}dB)")
+            processing_operations.append(f"Amplitude scaling: {amp_scale:.2f}× ({20 * np.log10(amp_scale):+.1f}dB)")
         if amp_shift != 0.0:
             processing_operations.append(f"Amplitude Shifting : {amp_shift:+.3f}")
         if time_scale != 1.0:
-            processing_operations.append(f"Time scaling: {time_scale:.2f}× ({1/time_scale:.2f}× duration)")
+            processing_operations.append(f"Time scaling: {time_scale:.2f}× ({1 / time_scale:.2f}× duration)")
         if time_shift != 0:
-            processing_operations.append(f"Temporal shift: {time_shift} samples ({time_shift/44100*1000:.1f}ms)")
-        
+            processing_operations.append(f"Temporal shift: {time_shift} samples ({time_shift / 44100 * 1000:.1f}ms)")
+
         if processing_operations:
             st.info("**Active Processing Operations:** " + " | ".join(processing_operations))
         else:
             st.info("**Processing Status:** Identity transform - no modifications applied")
-        
-        # Professional processed signal visualization
+
         st.markdown('<div class="step-indicator">Step 4: Processed Signal Analysis</div>', unsafe_allow_html=True)
-        
-        fig_proc = simulator.plot_signal_plotly(
-            processed_voice,
-            "Processed Voice Signal (Post-Processing)",
-            "voice_processed"
+
+        # Discrete-time plot for processed signal
+        x_proc = np.arange(len(processed_voice))
+        fig_proc = go.Figure()
+        fig_proc.add_trace(go.Scatter(x=x_proc, y=processed_voice,
+                                     mode='lines+markers',
+                                     name='Processed Signal'))
+        fig_proc.update_layout(
+            title="Processed Voice Signal (Discrete-Time Domain)",
+            xaxis_title="Sample Index (n)",
+            yaxis_title="Amplitude",
+            showlegend=True
         )
         st.plotly_chart(fig_proc, use_container_width=True)
-        
-        # Professional signal comparison
+
         st.markdown('<div class="step-indicator">Step 5: Comparative Analysis</div>', unsafe_allow_html=True)
-        
-        fig_comp = simulator.plot_comparison_plotly(st.session_state.voice_raw, processed_voice)
+
+        # Comparative plot with discrete indices
+        fig_comp = go.Figure()
+        fig_comp.add_trace(go.Scatter(x=x_orig, y=st.session_state.voice_raw,
+                                      mode='lines+markers', name='Original Signal'))
+        fig_comp.add_trace(go.Scatter(x=x_proc, y=processed_voice,
+                                      mode='lines+markers', name='Processed Signal'))
+        fig_comp.update_layout(
+            title="Comparison of Original and Processed Signals (Discrete-Time Domain)",
+            xaxis_title="Sample Index (n)",
+            yaxis_title="Amplitude",
+            showlegend=True
+        )
         st.plotly_chart(fig_comp, use_container_width=True)
-        
-        # Professional analysis and playback section
+
         st.markdown('<div class="step-indicator">Step 6: Performance Analysis & Export</div>', unsafe_allow_html=True)
-        
-        # Professional statistical analysis
+
         analysis_col1, analysis_col2, analysis_col3 = st.columns(3)
-        
+
         with analysis_col1:
             st.markdown("**Original Signal Metrics**")
-            orig_rms = np.sqrt(np.mean(st.session_state.voice_raw**2))
+            orig_rms = np.sqrt(np.mean(st.session_state.voice_raw ** 2))
             orig_peak = np.max(np.abs(st.session_state.voice_raw))
             orig_duration = len(st.session_state.voice_raw) / st.session_state.voice_sr
             orig_crest = orig_peak / orig_rms if orig_rms > 0 else 0
-            
+
             st.metric("RMS Level", f"{orig_rms:.4f}")
             st.metric("Peak Level", f"{orig_peak:.4f}")
             st.metric("Duration", f"{orig_duration:.3f}s")
             st.metric("Crest Factor", f"{orig_crest:.2f}")
-        
+
         with analysis_col2:
             st.markdown("**Processed Signal Metrics**")
-            proc_rms = np.sqrt(np.mean(processed_voice**2))
+            proc_rms = np.sqrt(np.mean(processed_voice ** 2))
             proc_peak = np.max(np.abs(processed_voice))
             proc_duration = len(processed_voice) / st.session_state.voice_sr
             proc_crest = proc_peak / proc_rms if proc_rms > 0 else 0
-            
+
             st.metric("RMS Level", f"{proc_rms:.4f}")
             st.metric("Peak Level", f"{proc_peak:.4f}")
             st.metric("Duration", f"{proc_duration:.3f}s")
             st.metric("Crest Factor", f"{proc_crest:.2f}")
-        
+
         with analysis_col3:
             st.markdown("**Processing Analysis**")
             rms_ratio = (proc_rms / orig_rms) if orig_rms > 0 else 0
             peak_ratio = (proc_peak / orig_peak) if orig_peak > 0 else 0
             duration_ratio = (proc_duration / orig_duration) if orig_duration > 0 else 0
-            
-            st.metric("RMS Change", f"{rms_ratio:.3f}× ({20*np.log10(rms_ratio) if rms_ratio > 0 else -np.inf:.1f}dB)")
+
+            st.metric("RMS Change",
+                      f"{rms_ratio:.3f}× ({20 * np.log10(rms_ratio) if rms_ratio > 0 else -np.inf:.1f}dB)")
             st.metric("Peak Change", f"{peak_ratio:.3f}×")
             st.metric("Duration Change", f"{duration_ratio:.3f}×")
-        
-        # Professional playback and export controls
+
         st.markdown("**Audio Playback & Export**")
-        
+
         playback_col1, playback_col2, playback_col3 = st.columns(3)
-        
+
         with playback_col1:
             if st.button("🔊 Original Signal Playback", use_container_width=True):
                 try:
@@ -1453,7 +1467,7 @@ def voice_dts_processor_page():
                     st.audio(buffer.getvalue(), format="audio/wav")
                 except Exception as e:
                     st.error(f"Playback error: {e}")
-        
+
         with playback_col2:
             if st.button("🎵 Processed Signal Playback", use_container_width=True):
                 try:
@@ -1466,7 +1480,7 @@ def voice_dts_processor_page():
                     st.audio(buffer.getvalue(), format="audio/wav")
                 except Exception as e:
                     st.error(f"Playback error: {e}")
-        
+
         with playback_col3:
             if st.button("💾 Export", use_container_width=True):
                 try:
@@ -1476,7 +1490,7 @@ def voice_dts_processor_page():
                     else:
                         normalized_proc = processed_voice
                     sf.write(buffer, normalized_proc, st.session_state.voice_sr, format='WAV', subtype='PCM_24')
-                    
+
                     st.download_button(
                         label="Download WAV (24-bit)",
                         data=buffer.getvalue(),
@@ -1486,41 +1500,43 @@ def voice_dts_processor_page():
                     )
                 except Exception as e:
                     st.error(f"Export error: {e}")
-        
-        # Professional advanced analysis
+
         with st.expander("🔬 Advanced Signal Analysis", expanded=False):
             st.markdown("**Detailed Signal Characteristics:**")
-            
+
             advanced_col1, advanced_col2 = st.columns(2)
-            
+
             with advanced_col1:
                 st.markdown("**Original Signal Properties:**")
                 orig_mean = np.mean(st.session_state.voice_raw)
                 orig_std = np.std(st.session_state.voice_raw)
-                orig_energy = np.sum(st.session_state.voice_raw**2)
+                orig_energy = np.sum(st.session_state.voice_raw ** 2)
                 orig_power = orig_energy / len(st.session_state.voice_raw)
-                
+                orig_peak = np.max(np.abs(st.session_state.voice_raw))
+                orig_rms = np.sqrt(np.mean(st.session_state.voice_raw ** 2))
+
                 st.text(f"DC Component: {orig_mean:.6f}")
                 st.text(f"Standard Deviation: {orig_std:.4f}")
                 st.text(f"Signal Energy: {orig_energy:.2f}")
                 st.text(f"Average Power: {orig_power:.6f}")
-                st.text(f"Dynamic Range: {20*np.log10(orig_peak/orig_rms) if orig_rms > 0 else 0:.1f} dB")
-            
+                st.text(f"Dynamic Range: {20 * np.log10(orig_peak / orig_rms) if orig_rms > 0 else 0:.1f} dB")
+
             with advanced_col2:
                 st.markdown("**Processed Signal Properties:**")
                 proc_mean = np.mean(processed_voice)
                 proc_std = np.std(processed_voice)
-                proc_energy = np.sum(processed_voice**2)
+                proc_energy = np.sum(processed_voice ** 2)
                 proc_power = proc_energy / len(processed_voice)
-                
+                proc_peak = np.max(np.abs(processed_voice))
+                proc_rms = np.sqrt(np.mean(processed_voice ** 2))
+
                 st.text(f"DC Component: {proc_mean:.6f}")
                 st.text(f"Standard Deviation: {proc_std:.4f}")
                 st.text(f"Signal Energy: {proc_energy:.2f}")
                 st.text(f"Average Power: {proc_power:.6f}")
-                st.text(f"Dynamic Range: {20*np.log10(proc_peak/proc_rms) if proc_rms > 0 else 0:.1f} dB")
-    
+                st.text(f"Dynamic Range: {20 * np.log10(proc_peak / proc_rms) if proc_rms > 0 else 0:.1f} dB")
+
     else:
-        # Professional standby interface
         st.markdown("""
         <div class='warning-box'>
             <h3>Voice Analysis System</h3>
