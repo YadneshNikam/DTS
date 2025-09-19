@@ -1,0 +1,7 @@
+plotly==6.3.0
+streamlit==1.49.1
+pandas==2.3.2
+numpy==2.3.3
+soundfile==0.13.1
+audio-recorder-streamlit==0.0.10
+scipy==1.16.2
