@@ -1297,14 +1297,39 @@ def voice_dts_processor_page():
     if len(st.session_state.voice_raw) > 0:
         st.markdown('<div class="step-indicator">Step 2: Signal Analysis</div>', unsafe_allow_html=True)
 
-        # Discrete-time plot for original signal
-        x_orig = np.arange(len(st.session_state.voice_raw))
+        # Add slider to select number of samples to display
+        st.markdown("""
+        <div class='info-box'>
+            <strong>Sample Display Control:</strong> Use the slider below to select how many samples to display from the recorded signal.
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Slider to control number of samples displayed
+        max_samples = len(st.session_state.voice_raw)
+        num_samples_to_display = st.slider(
+            'Number of Samples to Display',
+            min_value=100,
+            max_value=max_samples,
+            value=min(10000, max_samples),
+            step=100,
+            key="voice_display_samples",
+            help="Select the number of discrete-time samples to visualize from the recorded audio signal"
+        )
+
+        # Create a subset of the signal based on slider value
+        voice_display_subset = st.session_state.voice_raw[:num_samples_to_display]
+
+        # Display sample information
+        st.info(f"**Displaying:** {num_samples_to_display} samples out of {max_samples} total samples ({num_samples_to_display/st.session_state.voice_sr:.3f}s / {max_samples/st.session_state.voice_sr:.3f}s)")
+
+        # Discrete-time plot for original signal (using subset)
+        x_orig = np.arange(len(voice_display_subset))
         fig_orig = go.Figure()
-        fig_orig.add_trace(go.Scatter(x=x_orig, y=st.session_state.voice_raw,
+        fig_orig.add_trace(go.Scatter(x=x_orig, y=voice_display_subset,
                                       mode='lines+markers',
                                       name='Original Signal'))
         fig_orig.update_layout(
-            title="Original Voice Signal (Discrete-Time Domain)",
+            title=f"Original Voice Signal - Discrete-Time Domain ({num_samples_to_display} samples)",
             xaxis_title="Sample Index (n)",
             yaxis_title="Amplitude",
             showlegend=True
@@ -1382,14 +1407,15 @@ def voice_dts_processor_page():
 
         st.markdown('<div class="step-indicator">Step 4: Processed Signal Analysis</div>', unsafe_allow_html=True)
 
-        # Discrete-time plot for processed signal
-        x_proc = np.arange(len(processed_voice))
+        # Discrete-time plot for processed signal (using same sample count)
+        processed_voice_subset = processed_voice[:num_samples_to_display]
+        x_proc = np.arange(len(processed_voice_subset))
         fig_proc = go.Figure()
-        fig_proc.add_trace(go.Scatter(x=x_proc, y=processed_voice,
+        fig_proc.add_trace(go.Scatter(x=x_proc, y=processed_voice_subset,
                                      mode='lines+markers',
                                      name='Processed Signal'))
         fig_proc.update_layout(
-            title="Processed Voice Signal (Discrete-Time Domain)",
+            title=f"Processed Voice Signal - Discrete-Time Domain ({num_samples_to_display} samples)",
             xaxis_title="Sample Index (n)",
             yaxis_title="Amplitude",
             showlegend=True
@@ -1398,14 +1424,14 @@ def voice_dts_processor_page():
 
         st.markdown('<div class="step-indicator">Step 5: Comparative Analysis</div>', unsafe_allow_html=True)
 
-        # Comparative plot with discrete indices
+        # Comparative plot with discrete indices (using subset)
         fig_comp = go.Figure()
-        fig_comp.add_trace(go.Scatter(x=x_orig, y=st.session_state.voice_raw,
+        fig_comp.add_trace(go.Scatter(x=x_orig, y=voice_display_subset,
                                       mode='lines+markers', name='Original Signal'))
-        fig_comp.add_trace(go.Scatter(x=x_proc, y=processed_voice,
+        fig_comp.add_trace(go.Scatter(x=x_proc, y=processed_voice_subset,
                                       mode='lines+markers', name='Processed Signal'))
         fig_comp.update_layout(
-            title="Comparison of Original and Processed Signals (Discrete-Time Domain)",
+            title=f"Comparison: Original vs Processed Signals ({num_samples_to_display} samples)",
             xaxis_title="Sample Index (n)",
             yaxis_title="Amplitude",
             showlegend=True
